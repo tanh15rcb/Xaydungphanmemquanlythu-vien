@@ -1,0 +1,1 @@
+print("Chào mừng đến với ứng dụng quản lý thư viện!")

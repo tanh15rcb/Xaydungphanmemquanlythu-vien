@@ -14,9 +14,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(629, 484)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
-        self.centralwidget.setStyleSheet("QWidget {\n"
-"    background-color: #f0f0f0;\n"
-"}")
+        self.centralwidget.setStyleSheet("QWidget {}")
         self.centralwidget.setObjectName("centralwidget")
         self.lvDanhSachMuonSach = QtWidgets.QListView(parent=self.centralwidget)
         self.lvDanhSachMuonSach.setGeometry(QtCore.QRect(10, 240, 601, 192))

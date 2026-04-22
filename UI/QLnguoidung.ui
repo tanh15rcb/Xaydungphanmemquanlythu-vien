@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>UserWindow</class>
+ <widget class="QMainWindow" name="UserWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>850</width>
+    <height>600</height>
+   </rect>
+  </property>
+
+  <property name="windowTitle">
+   <string>Quản lý người dùng</string>
+  </property>
+
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout">
+
+    <item>
+     <widget class="QGroupBox">
+      <property name="title">
+       <string>Thông tin người dùng</string>
+      </property>
+
+      <layout class="QGridLayout">
+
+       <item row="0" column="0">
+        <widget class="QLabel">
+         <property name="text">
+          <string>Mã người dùng</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="txtUserID"/>
+       </item>
+
+       <item row="0" column="2">
+        <widget class="QLabel">
+         <property name="text">
+          <string>Họ tên</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="0" column="3">
+        <widget class="QLineEdit" name="txtHoTen"/>
+       </item>
+
+       <item row="1" column="0">
+        <widget class="QLabel">
+         <property name="text">
+          <string>Tài khoản</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="txtUsername"/>
+       </item>
+
+       <item row="1" column="2">
+        <widget class="QLabel">
+         <property name="text">
+          <string>Mật khẩu</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="1" column="3">
+        <widget class="QLineEdit" name="txtPassword"/>
+       </item>
+
+       <item row="2" column="0">
+        <widget class="QLabel">
+         <property name="text">
+          <string>Vai trò</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cbRole">
+         <item>
+          <property name="text">
+           <string>Admin</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Thủ thư</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+
+       <item row="3" column="0">
+        <widget class="QPushButton" name="btnAdd">
+         <property name="text">
+          <string>Thêm</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="3" column="1">
+        <widget class="QPushButton" name="btnUpdate">
+         <property name="text">
+          <string>Sửa</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="3" column="2">
+        <widget class="QPushButton" name="btnDelete">
+         <property name="text">
+          <string>Xóa</string>
+         </property>
+        </widget>
+       </item>
+
+       <item row="3" column="3">
+        <widget class="QPushButton" name="btnClear">
+         <property name="text">
+          <string>Làm mới</string>
+         </property>
+        </widget>
+       </item>
+
+      </layout>
+     </widget>
+    </item>
+
+    <item>
+     <widget class="QTableWidget" name="tableUsers"/>
+    </item>
+
+   </layout>
+  </widget>
+
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

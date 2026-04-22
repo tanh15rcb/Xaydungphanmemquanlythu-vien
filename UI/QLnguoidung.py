@@ -4,12 +4,13 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1200, 750)
+        
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.mainLayout = QtWidgets.QHBoxLayout(self.centralwidget)
         self.mainLayout.setContentsMargins(0, 0, 0, 0)
         self.mainLayout.setSpacing(0)
-        
-        # --- SIDEBAR (Giữ nguyên 9 nút đồng bộ) ---
+
+        # --- SIDEBAR (Đồng bộ toàn bộ danh sách nút của bạn) ---
         self.sidebar = QtWidgets.QFrame(parent=self.centralwidget)
         self.sidebar.setMinimumSize(QtCore.QSize(230, 0))
         self.sidebar.setMaximumSize(QtCore.QSize(230, 16777215))
@@ -21,7 +22,7 @@ class Ui_MainWindow(object):
         self.labelLogo.setStyleSheet("font-size:20px; font-weight:bold; padding:20px; color:#ecf0f1;")
         self.sidebarLayout.addWidget(self.labelLogo)
         
-        # Các nút Sidebar
+        # ĐỊNH NGHĨA CÁC NÚT BẤM (Khớp chính xác yêu cầu của bạn)
         self.btnTrangChu = QtWidgets.QPushButton("🏠  Trang chủ")
         self.btnSach = QtWidgets.QPushButton("📚  Quản lý sách")
         self.btnMuonSach = QtWidgets.QPushButton("📖  Quản lý mượn sách")
@@ -32,20 +33,41 @@ class Ui_MainWindow(object):
         self.btnThongKe = QtWidgets.QPushButton("📊  Thống kê báo cáo")
         self.btnTaiKhoan = QtWidgets.QPushButton("👤  Quản lý tài khoản")
         
-        sidebar_btns = [self.btnTrangChu, self.btnSach, self.btnMuonSach, self.btnTraSach, 
-                        self.btnNhapHang, self.btnNCC, self.btnNhanVien, self.btnThongKe, self.btnTaiKhoan]
+        # Danh sách để duyệt style
+        self.sidebar_buttons = [
+            self.btnTrangChu, self.btnSach, self.btnMuonSach, self.btnTraSach,
+            self.btnNhapHang, self.btnNCC, self.btnNhanVien, self.btnThongKe, self.btnTaiKhoan
+        ]
         
-        btn_style = "text-align: left; padding-left: 15px; height: 40px; border:none; color: #bdc3c7; font-size: 13px;"
-        for btn in sidebar_btns:
-            btn.setStyleSheet(btn_style)
+        btn_sidebar_style = """
+            QPushButton {
+                text-align: left; 
+                padding-left: 15px; 
+                height: 40px; 
+                border:none; 
+                color: #bdc3c7;
+                font-size: 13px;
+            }
+            QPushButton:hover {
+                background-color: #34495e;
+                color: white;
+            }
+        """
+        
+        for btn in self.sidebar_buttons:
+            btn.setStyleSheet(btn_sidebar_style)
+            btn.setCursor(QtGui.QCursor(QtCore.Qt.CursorShape.PointingHandCursor))
             self.sidebarLayout.addWidget(btn)
         
-        self.btnSach.setStyleSheet(btn_style + "background:#3498db; color:white; font-weight:bold;")
+        # Highlight nút Nhân viên (Màu xanh dương làm nổi bật trang hiện tại)
+        self.btnNhanVien.setStyleSheet(btn_sidebar_style + "background:#3498db; color:white; font-weight:bold; border-radius:5px;")
+
         self.sidebarLayout.addStretch()
         
         self.btnLogout = QtWidgets.QPushButton("🚪  Đăng xuất")
         self.btnLogout.setStyleSheet("background:#e74c3c; color:white; height: 40px; border:none; font-weight:bold; margin: 10px; border-radius:5px;")
         self.sidebarLayout.addWidget(self.btnLogout)
+        
         self.mainLayout.addWidget(self.sidebar)
 
         # --- CONTENT AREA ---
@@ -55,90 +77,85 @@ class Ui_MainWindow(object):
         self.contentLayout.setContentsMargins(30, 20, 30, 20)
         self.contentLayout.setSpacing(15)
         
-        self.labelTitle = QtWidgets.QLabel("QUẢN LÝ SÁCH")
+        self.labelTitle = QtWidgets.QLabel("QUẢN LÝ NHÂN VIÊN")
         self.labelTitle.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.labelTitle.setStyleSheet("font-size:24px; font-weight:bold; color: #2f3640;")
+        self.labelTitle.setStyleSheet("font-size:24px; font-weight:bold; color: #2f3640; margin-top: 10px;")
         self.contentLayout.addWidget(self.labelTitle)
 
-        # 1. PHẦN NHẬP LIỆU (Đã thêm NXB và Năm xuất bản)
+        # 1. KHỐI NHẬP LIỆU (ID tự động nên đã bỏ)
         self.formContainer = QtWidgets.QFrame()
         self.formContainer.setStyleSheet("background: white; border-radius: 8px; border: 1px solid #dcdde1;")
         self.formLayout = QtWidgets.QGridLayout(self.formContainer)
-        self.formLayout.setContentsMargins(25, 20, 25, 20)
+        self.formLayout.setContentsMargins(25, 25, 25, 25)
         self.formLayout.setSpacing(15)
 
-        # Khởi tạo các ô nhập liệu
-        self.txtTenSach = QtWidgets.QLineEdit()
-        self.txtTacGia = QtWidgets.QLineEdit()
-        self.txtTheLoai = QtWidgets.QLineEdit()
-        self.txtSoLuong = QtWidgets.QLineEdit()
-        self.txtNXB = QtWidgets.QLineEdit()          # Mới: Nhà xuất bản
-        self.txtNamXB = QtWidgets.QLineEdit()        # Mới: Năm xuất bản
+        self.txtTenNV = QtWidgets.QLineEdit()
+        self.txtTenNV.setPlaceholderText("Nhập đầy đủ họ tên...")
+        self.cboGioiTinh = QtWidgets.QComboBox()
+        self.cboGioiTinh.addItems(["Nam", "Nữ", "Khác"])
+        self.txtSdt = QtWidgets.QLineEdit()
+        self.txtEmail = QtWidgets.QLineEdit()
+        self.txtDiaChi = QtWidgets.QLineEdit()
 
-        # Sắp xếp vào Grid (Dòng, Cột)
-        # Hàng 0
-        self.formLayout.addWidget(QtWidgets.QLabel("Tên sách:"), 0, 0)
-        self.formLayout.addWidget(self.txtTenSach, 0, 1)
-        self.formLayout.addWidget(QtWidgets.QLabel("Tác giả:"), 0, 2)
-        self.formLayout.addWidget(self.txtTacGia, 0, 3)
+        self.formLayout.addWidget(QtWidgets.QLabel("Họ và Tên:"), 0, 0)
+        self.formLayout.addWidget(self.txtTenNV, 0, 1)
+        self.formLayout.addWidget(QtWidgets.QLabel("Giới tính:"), 0, 2)
+        self.formLayout.addWidget(self.cboGioiTinh, 0, 3)
         
-        # Hàng 1
-        self.formLayout.addWidget(QtWidgets.QLabel("Thể loại:"), 1, 0)
-        self.formLayout.addWidget(self.txtTheLoai, 1, 1)
-        self.formLayout.addWidget(QtWidgets.QLabel("Số lượng:"), 1, 2)
-        self.formLayout.addWidget(self.txtSoLuong, 1, 3)
+        self.formLayout.addWidget(QtWidgets.QLabel("Số điện thoại:"), 1, 0)
+        self.formLayout.addWidget(self.txtSdt, 1, 1)
+        self.formLayout.addWidget(QtWidgets.QLabel("Email:"), 1, 2)
+        self.formLayout.addWidget(self.txtEmail, 1, 3)
 
-        # Hàng 2 (Mới thêm)
-        self.formLayout.addWidget(QtWidgets.QLabel("Nhà xuất bản:"), 2, 0)
-        self.formLayout.addWidget(self.txtNXB, 2, 1)
-        self.formLayout.addWidget(QtWidgets.QLabel("Năm xuất bản:"), 2, 2)
-        self.formLayout.addWidget(self.txtNamXB, 2, 3)
-
+        self.formLayout.addWidget(QtWidgets.QLabel("Địa chỉ:"), 2, 0)
+        self.formLayout.addWidget(self.txtDiaChi, 2, 1, 1, 3)
+        
         self.contentLayout.addWidget(self.formContainer)
 
-        # 2. NÚT CHỨC NĂNG
-        self.buttonLayout = QtWidgets.QHBoxLayout()
+        # 2. KHỐI NÚT CHỨC NĂNG
+        self.btnActionLayout = QtWidgets.QHBoxLayout()
         self.btnThem = QtWidgets.QPushButton("➕ Thêm mới")
-        self.btnSua = QtWidgets.QPushButton("🔧 Sửa thông tin")
-        self.btnXoa = QtWidgets.QPushButton("🗑️ Xóa sách")
+        self.btnSua = QtWidgets.QPushButton("🔧 Cập nhật")
+        self.btnXoa = QtWidgets.QPushButton("🗑️ Xóa nhân viên")
         
         btn_action_style = "height: 40px; border-radius: 5px; font-weight: bold; color: white; min-width: 130px; border:none;"
         self.btnThem.setStyleSheet(btn_action_style + "background-color: #2ecc71;")
         self.btnSua.setStyleSheet(btn_action_style + "background-color: #f1c40f;")
         self.btnXoa.setStyleSheet(btn_action_style + "background-color: #e74c3c;")
 
-        self.buttonLayout.addWidget(self.btnThem)
-        self.buttonLayout.addWidget(self.btnSua)
-        self.buttonLayout.addWidget(self.btnXoa)
-        self.buttonLayout.addStretch()
-        self.contentLayout.addLayout(self.buttonLayout)
+        self.btnActionLayout.addWidget(self.btnThem)
+        self.btnActionLayout.addWidget(self.btnSua)
+        self.btnActionLayout.addWidget(self.btnXoa)
+        self.btnActionLayout.addStretch()
+        self.contentLayout.addLayout(self.btnActionLayout)
 
-        # 3. TÌM KIẾM
+        # 3. THANH TÌM KIẾM
         self.searchLayout = QtWidgets.QHBoxLayout()
         self.txtTimKiem = QtWidgets.QLineEdit()
-        self.txtTimKiem.setPlaceholderText("Tìm kiếm theo tên sách, tác giả, NXB...")
+        self.txtTimKiem.setPlaceholderText("Tìm kiếm theo tên hoặc SĐT nhân viên...")
         self.btnTimKiem = QtWidgets.QPushButton("🔍 Tìm kiếm")
-        self.btnTimKiem.setStyleSheet("background: #34495e; color: white; height: 35px; width: 120px; border-radius: 5px; font-weight: bold;")
-        self.txtTimKiem.setStyleSheet("height: 35px; border-radius: 5px; border: 1px solid #dcdde1; padding-left: 10px; background: white;")
+        self.btnTimKiem.setFixedWidth(120)
+        self.btnTimKiem.setStyleSheet("background-color: #34495e; color: white; height: 35px; border-radius: 5px; font-weight: bold;")
         
         self.searchLayout.addWidget(self.txtTimKiem)
         self.searchLayout.addWidget(self.btnTimKiem)
         self.contentLayout.addLayout(self.searchLayout)
 
-        # 4. BẢNG DỮ LIỆU (Cập nhật cột)
-        self.tableSach = QtWidgets.QTableWidget()
-        self.tableSach.setColumnCount(7) # Tăng lên 7 cột
-        self.tableSach.setHorizontalHeaderLabels(["Mã sách", "Tên sách", "Tác giả", "Thể loại", "Số lượng", "NXB", "Năm XB"])
-        self.tableSach.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
-        self.tableSach.setStyleSheet("background: white; border-radius: 8px; border: 1px solid #dcdde1;")
-        self.contentLayout.addWidget(self.tableSach)
+        # 4. BẢNG DỮ LIỆU
+        self.tableNV = QtWidgets.QTableWidget()
+        self.tableNV.setColumnCount(6)
+        self.tableNV.setHorizontalHeaderLabels(["ID", "Họ Tên", "Giới Tính", "SĐT", "Email", "Địa Chỉ"])
+        self.tableNV.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.tableNV.setStyleSheet("background: white; border-radius: 8px; border: 1px solid #dcdde1;")
+        self.tableNV.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows) # Chọn cả dòng
+        self.contentLayout.addWidget(self.tableNV)
 
         self.mainLayout.addWidget(self.content)
         MainWindow.setCentralWidget(self.centralwidget)
 
-        # Style các LineEdit
+        # Style các ô nhập liệu chung
         input_style = "height: 35px; border-radius: 5px; border: 1px solid #dcdde1; background: white; padding-left: 10px;"
-        for ipt in [self.txtTenSach, self.txtTacGia, self.txtTheLoai, self.txtSoLuong, self.txtNXB, self.txtNamXB]:
+        for ipt in [self.txtTenNV, self.txtSdt, self.txtEmail, self.txtDiaChi, self.txtTimKiem, self.cboGioiTinh]:
             ipt.setStyleSheet(input_style)
 
 if __name__ == "__main__":

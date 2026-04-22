@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1100</width>
+    <height>650</height>
+   </rect>
+  </property>
+
+  <property name="windowTitle">
+   <string>Quản lý tài khoản</string>
+  </property>
+
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout">
+
+    <!-- TITLE -->
+    <item>
+     <widget class="QLabel">
+      <property name="text">
+       <string>QUẢN LÝ TÀI KHOẢN</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+      <property name="styleSheet">
+       <string>font-size:22px; font-weight:bold;</string>
+      </property>
+     </widget>
+    </item>
+
+    <!-- FORM -->
+    <item>
+     <widget class="QFrame">
+      <property name="styleSheet">
+       <string>
+        background:white;
+        border-radius:10px;
+        border:1px solid #ccc;
+       </string>
+      </property>
+
+      <layout class="QGridLayout">
+
+       <item row="0" column="0">
+        <widget class="QLabel">
+         <property name="text"><string>Tên đăng nhập:</string></property>
+        </widget>
+       </item>
+
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="txt_username"/>
+       </item>
+
+       <item row="1" column="0">
+        <widget class="QLabel">
+         <property name="text"><string>Mật khẩu:</string></property>
+        </widget>
+       </item>
+
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="txt_password">
+         <property name="echoMode">
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+
+       <item row="2" column="0">
+        <widget class="QLabel">
+         <property name="text"><string>Vai trò:</string></property>
+        </widget>
+       </item>
+
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cb_role">
+         <item><property name="text"><string>Admin</string></property></item>
+         <item><property name="text"><string>Nhân viên</string></property></item>
+        </widget>
+       </item>
+
+       <item row="3" column="0">
+        <widget class="QLabel">
+         <property name="text"><string>Trạng thái:</string></property>
+        </widget>
+       </item>
+
+       <item row="3" column="1">
+        <widget class="QComboBox" name="cb_status">
+         <item><property name="text"><string>Hoạt động</string></property></item>
+         <item><property name="text"><string>Khóa</string></property></item>
+        </widget>
+       </item>
+
+      </layout>
+     </widget>
+    </item>
+
+    <!-- BUTTONS -->
+    <item>
+     <layout class="QHBoxLayout">
+
+      <item>
+       <widget class="QPushButton" name="btn_add">
+        <property name="text"><string>Thêm</string></property>
+        <property name="styleSheet">
+         <string>background:#2ecc71; color:white;</string>
+        </property>
+       </widget>
+      </item>
+
+      <item>
+       <widget class="QPushButton" name="btn_update">
+        <property name="text"><string>Sửa</string></property>
+        <property name="styleSheet">
+         <string>background:#3498db; color:white;</string>
+        </property>
+       </widget>
+      </item>
+
+      <item>
+       <widget class="QPushButton" name="btn_delete">
+        <property name="text"><string>Xóa</string></property>
+        <property name="styleSheet">
+         <string>background:#e74c3c; color:white;</string>
+        </property>
+       </widget>
+      </item>
+
+      <item>
+       <widget class="QPushButton" name="btn_refresh">
+        <property name="text"><string>Làm mới</string></property>
+       </widget>
+      </item>
+
+     </layout>
+    </item>
+
+    <!-- TABLE -->
+    <item>
+     <widget class="QTableWidget" name="table_accounts">
+      <column>
+       <property name="text"><string>Username</string></property>
+      </column>
+      <column>
+       <property name="text"><string>Vai trò</string></property>
+      </column>
+      <column>
+       <property name="text"><string>Trạng thái</string></property>
+      </column>
+     </widget>
+    </item>
+
+   </layout>
+  </widget>
+ </widget>
+
+ <resources/>
+ <connections/>
+</ui>

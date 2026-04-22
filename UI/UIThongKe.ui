@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>700</height>
+   </rect>
+  </property>
+
+  <property name="windowTitle">
+   <string>HỆ THỐNG QUẢN LÝ THƯ VIỆN</string>
+  </property>
+
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout">
+
+    <!-- ===== SIDEBAR ===== -->
+    <item>
+     <widget class="QFrame" name="sidebar">
+      <property name="minimumWidth"><number>250</number></property>
+      <property name="styleSheet">
+       <string>
+        background:#2c3e50;
+        color:white;
+       </string>
+      </property>
+
+      <layout class="QVBoxLayout">
+
+       <!-- TITLE -->
+       <item>
+        <widget class="QLabel">
+         <property name="text"><string>LIBRARY PRO</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+         <property name="styleSheet">
+          <string>font-size:20px; font-weight:bold;</string>
+         </property>
+        </widget>
+       </item>
+
+       <!-- MENU -->
+       <item><widget class="QPushButton"><property name="text"><string>Trang chủ</string></property></widget></item>
+       <item><widget class="QPushButton"><property name="text"><string>Báo cáo thống kê</string></property></widget></item>
+       <item><widget class="QPushButton"><property name="text"><string>Quản lý sách</string></property></widget></item>
+       <item><widget class="QPushButton"><property name="text"><string>Mượn &amp; Trả</string></property></widget></item>
+       <item><widget class="QPushButton"><property name="text"><string>Nhập hàng</string></property></widget></item>
+       <item><widget class="QPushButton"><property name="text"><string>Nhà cung cấp</string></property></widget></item>
+
+       <item>
+        <spacer>
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </spacer>
+       </item>
+
+       <!-- EXIT -->
+       <item>
+        <widget class="QPushButton">
+         <property name="text"><string>Thoát</string></property>
+         <property name="styleSheet">
+          <string>
+           background:#e74c3c;
+           color:white;
+           font-weight:bold;
+          </string>
+         </property>
+        </widget>
+       </item>
+
+      </layout>
+     </widget>
+    </item>
+
+    <!-- ===== CONTENT ===== -->
+    <item>
+     <widget class="QFrame">
+      <property name="styleSheet">
+       <string>background:#ecf0f1;</string>
+      </property>
+
+      <layout class="QVBoxLayout">
+
+       <!-- HEADER -->
+       <item>
+        <widget class="QLabel">
+         <property name="text">
+          <string>BÁO CÁO THỐNG KÊ CHI TIẾT</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+         <property name="styleSheet">
+          <string>font-size:22px; font-weight:bold;</string>
+         </property>
+        </widget>
+       </item>
+
+       <!-- CHART BOX -->
+       <item>
+        <layout class="QVBoxLayout">
+
+         <!-- BAR FRAME -->
+         <item>
+          <widget class="QFrame" name="barFrame">
+           <property name="minimumHeight"><number>250</number></property>
+           <property name="styleSheet">
+            <string>
+             background:white;
+             border-radius:10px;
+             border:1px solid #ccc;
+            </string>
+           </property>
+          </widget>
+         </item>
+
+         <!-- PIE FRAME -->
+         <item>
+          <widget class="QFrame" name="pieFrame">
+           <property name="minimumHeight"><number>250</number></property>
+           <property name="styleSheet">
+            <string>
+             background:white;
+             border-radius:10px;
+             border:1px solid #ccc;
+            </string>
+           </property>
+          </widget>
+         </item>
+
+        </layout>
+       </item>
+
+      </layout>
+     </widget>
+    </item>
+
+   </layout>
+  </widget>
+ </widget>
+
+ <resources/>
+ <connections/>
+</ui>

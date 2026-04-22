@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>700</height>
+   </rect>
+  </property>
+
+  <property name="windowTitle">
+   <string>HỆ THỐNG QUẢN LÝ THƯ VIỆN</string>
+  </property>
+
+  <widget class="QWidget" name="centralwidget">
+
+   <layout class="QHBoxLayout" name="mainLayout">
+
+    <!-- SIDEBAR -->
+    <item>
+     <widget class="QFrame" name="sidebar">
+      <property name="minimumSize">
+       <size><width>220</width><height>0</height></size>
+      </property>
+
+      <property name="styleSheet">
+       <string>background:#2c3e50;color:white;</string>
+      </property>
+
+      <layout class="QVBoxLayout">
+
+       <item>
+        <widget class="QLabel">
+         <property name="text"><string>LIBRARY</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+         <property name="styleSheet">
+          <string>font-size:20px;font-weight:bold;padding:20px;</string>
+         </property>
+        </widget>
+       </item>
+
+       <item><widget class="QPushButton" name="btnTrangChu"><property name="text"><string>Trang chủ</string></property></widget></item>
+       <item><widget class="QPushButton" name="btnSach"><property name="text"><string>Quản lý Sách</string></property></widget></item>
+       <item><widget class="QPushButton" name="btnMuonTra"><property name="text"><string>Mượn &amp; Trả</string></property></widget></item>
+       <item><widget class="QPushButton" name="btnNhap"><property name="text"><string>Nhập hàng</string></property></widget></item>
+       <item><widget class="QPushButton" name="btnNCC"><property name="text"><string>Nhà cung cấp</string></property></widget></item>
+       <item><widget class="QPushButton" name="btnUser"><property name="text"><string>Tài khoản</string></property></widget></item>
+
+       <item>
+        <spacer>
+         <property name="orientation"><enum>Qt::Vertical</enum></property>
+        </spacer>
+       </item>
+
+       <item>
+        <widget class="QPushButton" name="btnLogout">
+         <property name="text"><string>Đăng xuất</string></property>
+         <property name="styleSheet">
+          <string>background:#e74c3c;color:white;</string>
+         </property>
+        </widget>
+       </item>
+
+      </layout>
+     </widget>
+    </item>
+
+    <!-- CONTENT -->
+    <item>
+     <widget class="QFrame" name="content">
+      <property name="styleSheet">
+       <string>background:#ecf0f1;</string>
+      </property>
+
+      <layout class="QVBoxLayout">
+
+       <!-- TITLE -->
+       <item>
+        <widget class="QLabel">
+         <property name="text"><string>MƯỢN / TRẢ SÁCH</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+         <property name="styleSheet">
+          <string>font-size:22px;font-weight:bold;padding:10px;</string>
+         </property>
+        </widget>
+       </item>
+
+       <!-- FORM -->
+       <item>
+        <widget class="QGroupBox">
+         <property name="title">
+          <string>Thông tin trả sách</string>
+         </property>
+
+         <layout class="QGridLayout" name="grid">
+
+          <!-- FIX QUAN TRỌNG: GIÃN CỘT INPUT -->
+          <property name="columnStretch">
+           <string>0,1,0,1</string>
+          </property>
+
+          <property name="horizontalSpacing">
+           <number>15</number>
+          </property>
+
+          <property name="verticalSpacing">
+           <number>10</number>
+          </property>
+
+          <!-- ROW 0 -->
+          <item row="0" column="0"><widget class="QLabel"><property name="text"><string>Mã phiếu</string></property></widget></item>
+          <item row="0" column="1"><widget class="QLineEdit" name="txtMaPhieu"/></item>
+
+          <item row="0" column="2"><widget class="QLabel"><property name="text"><string>Mã SV</string></property></widget></item>
+          <item row="0" column="3"><widget class="QLineEdit" name="txtMaSV"/></item>
+
+          <!-- ROW 1 -->
+          <item row="1" column="0"><widget class="QLabel"><property name="text"><string>Họ tên</string></property></widget></item>
+          <item row="1" column="1" colspan="3"><widget class="QLineEdit" name="txtTenSV"/></item>
+
+          <!-- ROW 2 -->
+          <item row="2" column="0"><widget class="QLabel"><property name="text"><string>Sách</string></property></widget></item>
+          <item row="2" column="1" colspan="3"><widget class="QLineEdit" name="txtSach"/></item>
+
+          <!-- ROW 3 -->
+          <item row="3" column="0"><widget class="QLabel"><property name="text"><string>Ngày mượn</string></property></widget></item>
+          <item row="3" column="1"><widget class="QDateEdit" name="dateMuon"/></item>
+
+          <item row="3" column="2"><widget class="QLabel"><property name="text"><string>Hạn trả</string></property></widget></item>
+          <item row="3" column="3"><widget class="QDateEdit" name="dateHanTra"/></item>
+
+          <!-- ROW 4 -->
+          <item row="4" column="0"><widget class="QLabel"><property name="text"><string>Ngày trả</string></property></widget></item>
+          <item row="4" column="1"><widget class="QDateEdit" name="dateTra"/></item>
+
+          <item row="4" column="2"><widget class="QLabel"><property name="text"><string>Số ngày trễ</string></property></widget></item>
+          <item row="4" column="3"><widget class="QLineEdit" name="txtTre"/></item>
+
+          <!-- ROW 5 -->
+          <item row="5" column="0"><widget class="QLabel"><property name="text"><string>Phạt/ngày</string></property></widget></item>
+          <item row="5" column="1"><widget class="QLineEdit" name="txtPhatNgay"><property name="text"><string>2000</string></property></widget></item>
+
+          <item row="5" column="2"><widget class="QLabel"><property name="text"><string>Tổng phạt</string></property></widget></item>
+          <item row="5" column="3"><widget class="QLineEdit" name="txtTongPhat"/></item>
+
+          <!-- BUTTON -->
+          <item row="6" column="1">
+           <widget class="QPushButton" name="btnTinh">
+            <property name="text"><string>Tính tiền phạt</string></property>
+           </widget>
+          </item>
+
+          <item row="6" column="3">
+           <widget class="QPushButton" name="btnTra">
+            <property name="text"><string>Trả sách</string></property>
+           </widget>
+          </item>
+
+         </layout>
+        </widget>
+       </item>
+
+       <!-- TABLE -->
+       <item>
+        <widget class="QTableWidget" name="tableMuonTra"/>
+       </item>
+
+      </layout>
+     </widget>
+    </item>
+
+   </layout>
+  </widget>
+ </widget>
+
+ <resources/>
+ <connections/>
+</ui>

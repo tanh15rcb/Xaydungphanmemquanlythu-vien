@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RegisterForm</class>
+ <widget class="QWidget" name="RegisterForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>420</width>
+    <height>420</height>
+   </rect>
+  </property>
+
+  <property name="windowTitle">
+   <string>Đăng ký tài khoản</string>
+  </property>
+
+  <layout class="QVBoxLayout">
+
+   <!-- TITLE -->
+   <item>
+    <widget class="QLabel">
+     <property name="text">
+      <string>ĐĂNG KÝ TÀI KHOẢN</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="styleSheet">
+      <string>font-size:14px;font-weight:bold</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- USER -->
+   <item>
+    <widget class="QLineEdit" name="txtUser">
+     <property name="minimumHeight">
+      <number>40</number>
+     </property>
+     <property name="placeholderText">
+      <string>Tên đăng nhập</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- PASS -->
+   <item>
+    <widget class="QLineEdit" name="txtPass">
+     <property name="minimumHeight">
+      <number>40</number>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Password</enum>
+     </property>
+     <property name="placeholderText">
+      <string>Mật khẩu</string>
+     </property>
+    </widget>
+   </item>
+
+   <!-- ROLE -->
+   <item>
+    <widget class="QComboBox" name="cboRole">
+     <property name="minimumHeight">
+      <number>40</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>NhanVien</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+
+   <!-- BUTTON -->
+   <item>
+    <widget class="QPushButton" name="btnCreate">
+     <property name="minimumHeight">
+      <number>45</number>
+     </property>
+     <property name="styleSheet">
+      <string>font-weight:bold</string>
+     </property>
+     <property name="text">
+      <string>Tạo tài khoản</string>
+     </property>
+    </widget>
+   </item>
+
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

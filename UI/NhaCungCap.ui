@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>737</width>
-    <height>467</height>
+    <width>727</width>
+    <height>510</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="mainLayout">
+   <layout class="QHBoxLayout">
     <item>
-     <widget class="QFrame" name="sidebar">
+     <widget class="QFrame" name="frame">
       <property name="minimumSize">
        <size>
         <width>220</width>
@@ -23,9 +23,9 @@
       <property name="styleSheet">
        <string>background-color:#2c3e50;color:white;</string>
       </property>
-      <layout class="QVBoxLayout" name="sidebarLayout">
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="labelLogo">
+        <widget class="QLabel" name="label">
          <property name="styleSheet">
           <string>font-size:20px;font-weight:bold;padding:20px;</string>
          </property>
@@ -38,65 +38,65 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnTrangChu">
+        <widget class="QPushButton" name="pushButton">
          <property name="text">
           <string>Trang chủ</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnSach">
-         <property name="styleSheet">
-          <string>background:#3498db;border-radius:8px;</string>
-         </property>
+        <widget class="QPushButton" name="pushButton">
          <property name="text">
           <string>Quản lý Sách</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnMuonTra">
+        <widget class="QPushButton" name="pushButton">
          <property name="text">
           <string>Mượn &amp; Trả</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnNhap">
+        <widget class="QPushButton" name="pushButton">
          <property name="text">
           <string>Nhập hàng</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnNCC">
+        <widget class="QPushButton" name="pushButton">
+         <property name="styleSheet">
+          <string>background:#3498db;border-radius:8px;</string>
+         </property>
          <property name="text">
           <string>Nhà cung cấp</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btnUser">
+        <widget class="QPushButton" name="pushButton">
          <property name="text">
           <string>Tài khoản</string>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="spacer">
+        <spacer>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>0</width>
+           <height>0</height>
           </size>
          </property>
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="btnLogout">
+        <widget class="QPushButton" name="pushButton">
          <property name="styleSheet">
           <string>background:#e74c3c;color:white;border-radius:8px;</string>
          </property>
@@ -109,18 +109,18 @@
      </widget>
     </item>
     <item>
-     <widget class="QFrame" name="content">
+     <widget class="QFrame" name="frame">
       <property name="styleSheet">
        <string>background:#ecf0f1;border-radius:10px;</string>
       </property>
-      <layout class="QVBoxLayout" name="contentLayout">
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="labelTitle">
+        <widget class="QLabel" name="label">
          <property name="styleSheet">
           <string>font-size:22px;font-weight:bold;</string>
          </property>
          <property name="text">
-          <string>CẬP NHẬT THÔNG TIN SÁCH</string>
+          <string>DANH SÁCH ĐỐI TÁC</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -128,99 +128,63 @@
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="formLayout">
+        <layout class="QHBoxLayout">
          <item>
-          <widget class="QLineEdit" name="txtTenSach">
+          <widget class="QLineEdit" name="txtTenNCC">
            <property name="placeholderText">
-            <string>Tên sách</string>
+            <string>Tên nhà cung cấp</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="txtTacGia">
+          <widget class="QLineEdit" name="txtSDT">
            <property name="placeholderText">
-            <string>Tác giả</string>
+            <string>SĐT</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="txtTheLoai">
+          <widget class="QLineEdit" name="txtDiaChi">
            <property name="placeholderText">
-            <string>Thể loại</string>
+            <string>Địa chỉ</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="txtSoLuong">
-           <property name="placeholderText">
-            <string>Số lượng</string>
+          <widget class="QPushButton" name="btnLuu">
+           <property name="styleSheet">
+            <string>background:#3498db;color:white;border-radius:6px;height:35px;</string>
+           </property>
+           <property name="text">
+            <string>Lưu thông tin</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="buttonLayout">
-         <item>
-          <widget class="QPushButton" name="btnThem">
-           <property name="styleSheet">
-            <string>background:#2ecc71;color:white;height:35px;border-radius:6px;</string>
-           </property>
-           <property name="text">
-            <string>Thêm mới</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnSua">
-           <property name="styleSheet">
-            <string>background:#f1c40f;color:white;height:35px;border-radius:6px;</string>
-           </property>
-           <property name="text">
-            <string>Sửa</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnXoa">
-           <property name="styleSheet">
-            <string>background:#e74c3c;color:white;height:35px;border-radius:6px;</string>
-           </property>
-           <property name="text">
-            <string>Xóa</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QTableWidget" name="tableSach">
+        <widget class="QTableWidget" name="tableNCC">
          <property name="columnCount">
-          <number>5</number>
+          <number>4</number>
          </property>
          <column>
           <property name="text">
-           <string>Mã sách</string>
+           <string>Mã NCC</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Tên sách</string>
+           <string>Tên Nhà Cung Cấp</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Tác giả</string>
+           <string>Địa Chỉ</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Thể loại</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Số lượng</string>
+           <string>Số Điện Thoại</string>
           </property>
          </column>
         </widget>
@@ -230,17 +194,17 @@
     </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>737</width>
+     <width>727</width>
      <height>21</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <resources/>
  <connections/>

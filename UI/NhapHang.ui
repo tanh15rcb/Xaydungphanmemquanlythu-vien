@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>737</width>
-    <height>467</height>
+    <width>670</width>
+    <height>494</height>
    </rect>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="mainLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QFrame" name="sidebar">
       <property name="minimumSize">
@@ -23,7 +23,7 @@
       <property name="styleSheet">
        <string>background-color:#2c3e50;color:white;</string>
       </property>
-      <layout class="QVBoxLayout" name="sidebarLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_sidebar">
        <item>
         <widget class="QLabel" name="labelLogo">
          <property name="styleSheet">
@@ -46,9 +46,6 @@
        </item>
        <item>
         <widget class="QPushButton" name="btnSach">
-         <property name="styleSheet">
-          <string>background:#3498db;border-radius:8px;</string>
-         </property>
          <property name="text">
           <string>Quản lý Sách</string>
          </property>
@@ -63,6 +60,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="btnNhap">
+         <property name="styleSheet">
+          <string>background:#3498db;border-radius:8px;</string>
+         </property>
          <property name="text">
           <string>Nhập hàng</string>
          </property>
@@ -83,7 +83,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="spacer">
+        <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -113,14 +113,14 @@
       <property name="styleSheet">
        <string>background:#ecf0f1;border-radius:10px;</string>
       </property>
-      <layout class="QVBoxLayout" name="contentLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_content">
        <item>
         <widget class="QLabel" name="labelTitle">
          <property name="styleSheet">
           <string>font-size:22px;font-weight:bold;</string>
          </property>
          <property name="text">
-          <string>CẬP NHẬT THÔNG TIN SÁCH</string>
+          <string>NHẬP SÁCH MỚI</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -130,23 +130,26 @@
        <item>
         <layout class="QHBoxLayout" name="formLayout">
          <item>
+          <widget class="QComboBox" name="cbNCC">
+           <property name="currentText">
+            <string>Nhà Cung Cấp</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>Nhà Cung Cấp</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>NXB Trẻ</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
           <widget class="QLineEdit" name="txtTenSach">
            <property name="placeholderText">
-            <string>Tên sách</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="txtTacGia">
-           <property name="placeholderText">
-            <string>Tác giả</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="txtTheLoai">
-           <property name="placeholderText">
-            <string>Thể loại</string>
+            <string>Tên sách nhập</string>
            </property>
           </widget>
          </item>
@@ -157,70 +160,46 @@
            </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="buttonLayout">
          <item>
           <widget class="QPushButton" name="btnThem">
            <property name="styleSheet">
-            <string>background:#2ecc71;color:white;height:35px;border-radius:6px;</string>
+            <string>background:#27ae60;color:white;border-radius:6px;height:35px;</string>
            </property>
            <property name="text">
-            <string>Thêm mới</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnSua">
-           <property name="styleSheet">
-            <string>background:#f1c40f;color:white;height:35px;border-radius:6px;</string>
-           </property>
-           <property name="text">
-            <string>Sửa</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnXoa">
-           <property name="styleSheet">
-            <string>background:#e74c3c;color:white;height:35px;border-radius:6px;</string>
-           </property>
-           <property name="text">
-            <string>Xóa</string>
+            <string>Thêm vào danh sách</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableSach">
+        <widget class="QTableWidget" name="tableNhap">
          <property name="columnCount">
           <number>5</number>
          </property>
          <column>
           <property name="text">
-           <string>Mã sách</string>
+           <string>STT</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Tên sách</string>
+           <string>Nhà Cung Cấp</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Tác giả</string>
+           <string>Tên Sách</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Thể loại</string>
+           <string>Số Lượng</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Số lượng</string>
+           <string>Đơn Giá</string>
           </property>
          </column>
         </widget>
@@ -235,7 +214,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>737</width>
+     <width>670</width>
      <height>21</height>
     </rect>
    </property>

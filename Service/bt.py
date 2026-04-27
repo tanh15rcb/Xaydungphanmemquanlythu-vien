@@ -1,1 +1,0 @@
-print("file service Xử lý nghiệp vụ")

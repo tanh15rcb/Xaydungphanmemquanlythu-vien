@@ -1,1 +1,0 @@
-print("file kết nối Database")

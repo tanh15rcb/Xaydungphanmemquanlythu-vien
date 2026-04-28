@@ -24,7 +24,6 @@ class Ui_MainWindow(object):
         self.lbl_logo.setStyleSheet("font-size: 22pt; font-weight: bold; padding: 40px; color: #ecf0f1;")
         self.vbox_menu.addWidget(self.lbl_logo)
 
-        # Style menu
         menu_btn_style = """
             QPushButton {
                 text-align: left; padding: 15px 30px; font-size: 12pt; border: none; color: #bdc3c7; background-color: transparent;
@@ -33,29 +32,28 @@ class Ui_MainWindow(object):
             QPushButton:checked { background-color: #34495e; color: white; border-left: 5px solid #3498db; }
         """
 
-        # Các nút chức năng
-        self.btnTrangChu = QtWidgets.QPushButton("🏠  Trang chủ")
-        self.btnSach = QtWidgets.QPushButton("📚  Quản lý sách")
-        self.btnMuonSach = QtWidgets.QPushButton("📖  Quản lý mượn sách")
-        self.btnTraSach = QtWidgets.QPushButton("🔄  Quản lý trả sách")
-        self.btnNhapHang = QtWidgets.QPushButton("📦  Nhập hàng")
-        self.btnNCC = QtWidgets.QPushButton("🏢  Nhà cung cấp")
+        self.btnTrangChu = QtWidgets.QPushButton("🏠   Trang chủ")
+        self.btnSach = QtWidgets.QPushButton("📚   Quản lý sách")
+        self.btnMuonSach = QtWidgets.QPushButton("📖   Quản lý mượn sách")
+        self.btnTraSach = QtWidgets.QPushButton("🔄   Quản lý trả sách")
+        self.btnNhapHang = QtWidgets.QPushButton("📦   Nhập hàng")
+        self.btnNCC = QtWidgets.QPushButton("🏢   Nhà cung cấp")
         self.btnNhanVien = QtWidgets.QPushButton("👥 Quản lý Nhân viên")
-        self.btnThongKe = QtWidgets.QPushButton("📊  Thống kê báo cáo")
-        self.btnTaiKhoan = QtWidgets.QPushButton("👤  Quản lý tài khoản")
+        self.btnThongKe = QtWidgets.QPushButton("📊   Thống kê báo cáo")
+        self.btnTaiKhoan = QtWidgets.QPushButton("👤   Quản lý tài khoản")
 
         self.menu_buttons = [self.btnTrangChu, self.btnSach, self.btnMuonSach, self.btnTraSach, 
                              self.btnNhapHang, self.btnNCC, self.btnNhanVien, self.btnThongKe, self.btnTaiKhoan]
 
         for btn in self.menu_buttons:
-            btn.setCheckable(True) # Để có thể đánh dấu nút đang chọn
-            btn.setAutoExclusive(True) # Chỉ một nút được sáng lên tại một thời điểm
+            btn.setCheckable(True)
+            btn.setAutoExclusive(True)
             btn.setStyleSheet(menu_btn_style)
             self.vbox_menu.addWidget(btn)
 
         self.vbox_menu.addStretch()
 
-        self.btnLogout = QtWidgets.QPushButton("🚪  Đăng xuất")
+        self.btnLogout = QtWidgets.QPushButton("🚪   Đăng xuất")
         self.btnLogout.setStyleSheet("background-color: #e74c3c; color: white; padding: 15px; font-weight: bold; border: none;")
         self.vbox_menu.addWidget(self.btnLogout)
 
@@ -65,7 +63,6 @@ class Ui_MainWindow(object):
         self.StackedWidget = QtWidgets.QStackedWidget(parent=self.centralwidget)
         self.StackedWidget.setStyleSheet("background-color: #f5f6fa;")
         
-        # Trang 1: Giao diện Trang Chủ mặc định (Thống kê + Table)
         self.page_home = QtWidgets.QWidget()
         self.setup_home_page(self.page_home)
         self.StackedWidget.addWidget(self.page_home)
@@ -84,20 +81,25 @@ class Ui_MainWindow(object):
         layout.addWidget(title)
         layout.setAlignment(title, QtCore.Qt.AlignmentFlag.AlignCenter)
 
-        # Thẻ thống kê nhanh
+        # Thẻ thống kê nhanh - Gán các biến Label vào class để Main.py điều khiển được
         stats_layout = QtWidgets.QHBoxLayout()
-        stats_layout.addWidget(self.create_box("TỔNG SÁCH", "1,520", "#1abc9c"))
-        stats_layout.addWidget(self.create_box("ĐANG MƯỢN", "84", "#f1c40f"))
-        stats_layout.addWidget(self.create_box("QUÁ HẠN", "09", "#e74c3c"))
+        
+        box1, self.lbl_val_tong_sach = self.create_box("TỔNG SÁCH", "0", "#1abc9c")
+        box2, self.lbl_val_dang_muon = self.create_box("ĐANG MƯỢN", "0", "#f1c40f")
+        box3, self.lbl_val_qua_han = self.create_box("QUÁ HẠN", "0", "#e74c3c")
+        
+        stats_layout.addWidget(box1)
+        stats_layout.addWidget(box2)
+        stats_layout.addWidget(box3)
         layout.addLayout(stats_layout)
 
         # Bảng danh sách
-        self.tableSach = QtWidgets.QTableWidget()
-        self.tableSach.setColumnCount(4)
-        self.tableSach.setHorizontalHeaderLabels(["ID", "Tên sách", "Tác giả", "Số lượng"])
-        self.tableSach.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
-        self.tableSach.setStyleSheet("background-color: white; border-radius: 10px;")
-        layout.addWidget(self.tableSach)
+        self.tableMuonSach = QtWidgets.QTableWidget()
+        self.tableMuonSach.setColumnCount(4)
+        self.tableMuonSach.setHorizontalHeaderLabels(["ID", "Mã phiếu mượn", "Mã sách", "Số lượng"])
+        self.tableMuonSach.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.tableMuonSach.setStyleSheet("background-color: white; border-radius: 10px;")
+        layout.addWidget(self.tableMuonSach)
 
     def create_box(self, title, value, color):
         box = QtWidgets.QFrame()
@@ -106,7 +108,7 @@ class Ui_MainWindow(object):
         t = QtWidgets.QLabel(title); t.setStyleSheet("color: white; font-weight: bold;")
         v = QtWidgets.QLabel(value); v.setStyleSheet("color: white; font-size: 24pt; font-weight: bold;")
         l.addWidget(t); l.addWidget(v)
-        return box
+        return box, v # Quan trọng: Trả về box và label giá trị
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

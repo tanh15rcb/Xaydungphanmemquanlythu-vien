@@ -19,21 +19,21 @@ from UI.NhaCungCap import Ui_NhaCungCap
 from UI.UIthongke import Ui_ThongKe 
 from UI.UItaikhoan import Ui_MainWindow as Ui_TaiKhoan 
 
-# --- IMPORT SERVICE ĐĂNG NHẬP ---
+# --- IMPORT SERVICE ---
 from Service.DangNhap import dich_vu_dang_nhap
+from Service.TrangChu import dich_vu_trang_chu 
 
 # ================================================================
-# LỚP ĐĂNG NHẬP (Đã cập nhật dùng Service Database)
+# LỚP ĐĂNG NHẬP
 # ================================================================
 class LoginWindow(QtWidgets.QWidget):
-    login_success = QtCore.pyqtSignal(dict) # Gửi kèm thông tin user khi đăng nhập thành công
+    login_success = QtCore.pyqtSignal(dict) 
 
     def __init__(self):
         super().__init__()
         self.ui = Ui_LoginForm()
         self.ui.setupUi(self)
 
-        # Đổ bóng để làm nổi bật form đăng nhập
         shadow = QGraphicsDropShadowEffect(self)
         shadow.setBlurRadius(20)
         shadow.setColor(QColor(0, 0, 0, 100))
@@ -44,7 +44,6 @@ class LoginWindow(QtWidgets.QWidget):
         self.ui.txtPass.returnPressed.connect(self.handle_login)
 
     def handle_login(self):
-        # Lấy dữ liệu từ giao diện
         tai_khoan = self.ui.txtUser.text().strip()
         mat_khau = self.ui.txtPass.text().strip()
 
@@ -52,19 +51,16 @@ class LoginWindow(QtWidgets.QWidget):
             QtWidgets.QMessageBox.warning(self, "Thông báo", "Vui lòng nhập đầy đủ tài khoản và mật khẩu!")
             return
 
-        # Gọi Service để kiểm tra trong Database SQL Server
         ket_qua_dang_nhap = dich_vu_dang_nhap.thuc_hien_dang_nhap(tai_khoan, mat_khau)
 
         if ket_qua_dang_nhap["ket_qua"] == "thanh_cong":
-            # Nếu thành công, gửi dữ liệu user và đóng cửa sổ login
             self.login_success.emit(ket_qua_dang_nhap["thong_tin"])
             self.close()
         else:
-            # Hiển thị lỗi cụ thể từ Service (Sai thông tin hoặc Lỗi kết nối)
             QtWidgets.QMessageBox.warning(self, "Lỗi đăng nhập", ket_qua_dang_nhap["noi_dung"])
 
 # ================================================================
-# LỚP QUẢN LÝ CHÍNH (Giữ nguyên các hàm chức năng)
+# LỚP QUẢN LÝ CHÍNH
 # ================================================================
 class LibraryManager(QtWidgets.QMainWindow):
     def __init__(self):
@@ -73,27 +69,24 @@ class LibraryManager(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.setWindowTitle("Hệ Thống Quản Lý Thư Viện Pro")
 
-        # --- 1. KHỞI TẠO CÁC TRANG CON ---
         self.init_sub_pages()
-
-        # --- 2. KẾT NỐI SIDEBAR ---
         self.connect_sidebar_buttons()
 
-        # Mặc định Trang Chủ
+        # Mặc định hiển thị Trang Chủ (Index 0) và nạp dữ liệu từ Database
         self.ui.StackedWidget.setCurrentIndex(0)
+        self.cap_nhat_du_lieu_trang_chu()
 
     def _embed_page(self, ui_class, index):
-        """Hàm nhúng UI con vào StackedWidget"""
         temp_window = QtWidgets.QMainWindow()
         ui_instance = ui_class()
         ui_instance.setupUi(temp_window)
+        # Ẩn sidebar của trang con để dùng chung sidebar chính
         if hasattr(ui_instance, 'sidebar'):
             ui_instance.sidebar.hide()
         self.ui.StackedWidget.insertWidget(index, ui_instance.centralwidget)
         return ui_instance
 
     def init_sub_pages(self):
-        """Khởi tạo tất cả các trang theo đúng thứ tự Index"""
         self.ui_sach = self._embed_page(Ui_QuanLySach, 1)
         self.ui_muon = self._embed_page(Ui_QuanLyMuon, 2)
         self.ui_tra = self._embed_page(Ui_QuanLyTraSach, 3)
@@ -101,14 +94,37 @@ class LibraryManager(QtWidgets.QMainWindow):
         self.ui_ncc = self._embed_page(Ui_NhaCungCap, 5)
         self.ui_nv = self._embed_page(Ui_QuanLyNhanVien, 6)
         
-        # Trang Thống kê và Biểu đồ
         self.ui_thongke = self._embed_page(Ui_ThongKe, 7)
         self.ui_thongke.btnXemBaoCao.clicked.connect(self.update_charts)
-        self.update_charts() # Vẽ biểu đồ lần đầu
+        self.update_charts() 
 
         self.ui_taikhoan = self._embed_page(Ui_TaiKhoan, 8)
 
-    # --- CÁC HÀM XỬ LÝ BIỂU ĐỒ ---
+    # --- HÀM ĐỒNG BỘ DỮ LIỆU TRANG CHỦ ---
+    def cap_nhat_du_lieu_trang_chu(self):
+        """Lấy dữ liệu thực tế từ Database và đổ vào các thẻ thống kê + Table"""
+        # 1. Cập nhật 3 thẻ con số (Yêu cầu file UITrangChu trả về Label trong create_box)
+        tk = dich_vu_trang_chu.lay_thong_ke_tong_hop()
+        if tk:
+            try:
+                self.ui.lbl_val_tong_sach.setText(f"{tk['tong_sach']:,}")
+                self.ui.lbl_val_dang_muon.setText(f"{tk['dang_muon']:,}")
+                self.ui.lbl_val_qua_han.setText(f"{tk['qua_han']:,}")
+            except AttributeError:
+                print("Lỗi: Không tìm thấy các Label thống kê. Hãy kiểm tra lại file UITrangChu.py")
+
+        # 2. Đổ dữ liệu vào bảng mượn sách mới nhất
+        danh_sach = dich_vu_trang_chu.lay_danh_sach_muon_moi()
+        if hasattr(self.ui, 'tableMuonSach'):
+            self.ui.tableMuonSach.setRowCount(0)
+            for row_idx, row_data in enumerate(danh_sach):
+                self.ui.tableMuonSach.insertRow(row_idx)
+                for col_idx, value in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(value))
+                    item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                    self.ui.tableMuonSach.setItem(row_idx, col_idx, item)
+
+    # --- CÁC HÀM XỬ LÝ BIỂU ĐỒ (THỐNG KÊ) ---
     def get_test_data(self, criteria):
         if "mượn nhiều nhất" in criteria.lower():
             bar_data = {"Dế Mèn": 150, "Số Đỏ": 90, "Lão Hạc": 110, "Tắt Đèn": 200}
@@ -165,6 +181,9 @@ class LibraryManager(QtWidgets.QMainWindow):
 
     def switch_page(self, index):
         self.ui.StackedWidget.setCurrentIndex(index)
+        # Tự động làm mới dữ liệu mỗi khi quay lại Trang Chủ
+        if index == 0:
+            self.cap_nhat_du_lieu_trang_chu()
 
 # ================================================================
 # CHƯƠNG TRÌNH CHÍNH
@@ -177,8 +196,7 @@ if __name__ == "__main__":
     login_win = LoginWindow()
     main_win = LibraryManager()
 
-    # Kết nối: Đăng nhập OK -> Hiện Main
-    # Nhận thêm dữ liệu người dùng (nếu cần hiển thị tên lên trang chủ)
+    # Khi đăng nhập thành công thì hiện trang chính
     login_win.login_success.connect(lambda user_info: main_win.show())
 
     login_win.show()

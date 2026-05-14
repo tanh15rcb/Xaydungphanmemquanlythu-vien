@@ -19,6 +19,8 @@ from UI.NhapHang import Ui_NhapHang
 from UI.NhaCungCap import Ui_NhaCungCap
 from UI.UIthongke import Ui_ThongKe 
 from UI.UItaikhoan import Ui_MainWindow as Ui_TaiKhoan 
+from UI.XemSach import Ui_MainWindow as Ui_XemSach
+from UI.QuanLyGopY import Ui_QuanLyGopY
 
 # --- IMPORT SERVICE ---
 from Service.DangNhap import dich_vu_dang_nhap
@@ -30,7 +32,63 @@ from Service.NhapHang import dich_vu_nhap_hang
 from Service.NhaCungCap import dich_vu_ncc
 from Service.QuanLyNhanVien import dich_vu_nv 
 from Service.ThongKe import dich_vu_tk 
-from Service.QuanLyTaiKhoan import dich_vu_tai_khoan  # <--- THÊM SERVICE MỚI
+from Service.QuanLyTaiKhoan import dich_vu_tai_khoan
+from Service.XemSachService import dich_vu_xem_sach
+from Service.QuanLyGopYService import dich_vu_quan_ly_gop_y
+
+# ================================================================
+# LỚP XEM SÁCH DÀNH CHO SINH VIÊN (TÁCH BIỆT)
+# ================================================================
+class StudentViewWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_XemSach()
+        self.ui.setupUi(self)
+        self.setWindowTitle("Tra Cứu Sách Thư Viện")
+
+        # Kết nối sự kiện
+        self.ui.btnTimKiem.clicked.connect(self.handle_search)
+        self.ui.btnGuiGopY.clicked.connect(self.handle_send_feedback)
+        self.ui.btnBack.clicked.connect(self.handle_back)
+
+        # Load dữ liệu ban đầu
+        self.handle_search()
+
+    def handle_search(self):
+        tu_khoa = self.ui.txtTimKiem.text().strip()
+        data = dich_vu_quan_ly_sach.tim_kiem_sach(tu_khoa)
+        
+        self.ui.tableSach.setRowCount(0)
+        for r, row_d in enumerate(data):
+            self.ui.tableSach.insertRow(r)
+            # Hiển thị các cột: Mã, Tên, Tác giả, Thể loại, Số lượng, NXB, Năm XB
+            for i in range(7):
+                val = str(row_d[i])
+                item = QtWidgets.QTableWidgetItem(val)
+                item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                self.ui.tableSach.setItem(r, i, item)
+
+    def handle_send_feedback(self):
+        # 1. Lấy nội dung từ ô nhập liệu (txtGopY là tên object trong file XemSach.py)
+        noi_dung = self.ui.txtGopY.toPlainText().strip()
+        
+        # 2. Kiểm tra nếu nội dung rỗng
+        if not noi_dung:
+            QtWidgets.QMessageBox.warning(self, "Thông báo", "Vui lòng nhập nội dung góp ý!")
+            return
+        
+        # 3. Gọi service đã import (dich_vu_xem_sach) để lưu vào database
+        # Hàm gui_gop_y này đã được định nghĩa trong XemSachService của bạn
+        success = dich_vu_xem_sach.gui_gop_y(noi_dung)
+        
+        if success:
+            QtWidgets.QMessageBox.information(self, "Thành công", "Cảm ơn bạn đã gửi góp ý cho thư viện!")
+            self.ui.txtGopY.clear()  # Xóa nội dung sau khi gửi thành công
+        else:
+            QtWidgets.QMessageBox.critical(self, "Lỗi", "Không thể gửi góp ý lúc này. Vui lòng thử lại sau!")
+
+    def handle_back(self):
+        self.close()
 
 # ================================================================
 # LỚP ĐĂNG NHẬP
@@ -47,6 +105,7 @@ class LoginWindow(QtWidgets.QWidget):
         shadow.setColor(QColor(0, 0, 0, 100))
         self.ui.container.setGraphicsEffect(shadow)
         self.ui.btnLogin.clicked.connect(self.handle_login)
+        self.ui.btnStudentLogin.clicked.connect(self.handle_student_view)
         self.ui.btnClose.clicked.connect(QtWidgets.QApplication.quit)
         self.ui.txtPass.returnPressed.connect(self.handle_login)
 
@@ -59,22 +118,26 @@ class LoginWindow(QtWidgets.QWidget):
         ket_qua_dang_nhap = dich_vu_dang_nhap.thuc_hien_dang_nhap(tai_khoan, mat_khau)
         if ket_qua_dang_nhap["ket_qua"] == "thanh_cong":
             self.login_success.emit(ket_qua_dang_nhap["thong_tin"])
-            self.hide() # Sử dụng hide thay vì close để giữ trạng thái ứng dụng
+            self.hide() 
         else:
             QtWidgets.QMessageBox.warning(self, "Lỗi đăng nhập", ket_qua_dang_nhap["noi_dung"])
+            
+    def handle_student_view(self):
+        self.student_win = StudentViewWindow()
+        self.student_win.show()
 
 # ================================================================
 # LỚP QUẢN LÝ CHÍNH
 # ================================================================
 class LibraryManager(QtWidgets.QMainWindow):
-    logout_requested = QtCore.pyqtSignal() # Thêm signal để báo về main
+    logout_requested = QtCore.pyqtSignal() 
 
     def __init__(self, user_info=None):
         super().__init__()
         self.ui = Ui_MainFrame()
         self.ui.setupUi(self)
         self.setWindowTitle("Hệ Thống Quản Lý Thư Viện Pro")
-        self.user_info = user_info # Lưu thông tin user để phân quyền
+        self.user_info = user_info 
 
         self.init_sub_pages()
         self.connect_sidebar_buttons()
@@ -86,8 +149,8 @@ class LibraryManager(QtWidgets.QMainWindow):
         self.connect_quan_ly_nhan_vien_events() 
         self.connect_thong_ke_events() 
         self.connect_quan_ly_tai_khoan_events() 
+        self.connect_quan_ly_gop_y_events()
 
-        # --- KẾT NỐI NÚT ĐĂNG XUẤT ---
         if hasattr(self.ui, 'btnLogout'):
             self.ui.btnLogout.clicked.connect(self.handle_logout)
 
@@ -119,10 +182,9 @@ class LibraryManager(QtWidgets.QMainWindow):
         self.ui_nv = self._embed_page(Ui_QuanLyNhanVien, 6)
         self.ui_thongke = self._embed_page(Ui_ThongKe, 7)
         self.ui_taikhoan = self._embed_page(Ui_TaiKhoan, 8)
+        self.ui_gopy = self._embed_page(Ui_QuanLyGopY, 9)
 
-    # ----------------------------------------------------------------
-    # QUẢN LÝ TÀI KHOẢN
-    # ----------------------------------------------------------------
+    # --- QUẢN LÝ TÀI KHOẢN ---
     def connect_quan_ly_tai_khoan_events(self):
         self.ui_taikhoan.btnThem.clicked.connect(self.handle_them_tk)
         self.ui_taikhoan.btnSua.clicked.connect(self.handle_sua_tk)
@@ -176,9 +238,7 @@ class LibraryManager(QtWidgets.QMainWindow):
             success, msg = dich_vu_tai_khoan.xoa_tai_khoan(ma_user)
             if success: self.load_data_tk()
 
-    # ----------------------------------------------------------------
-    # QUẢN LÝ TRẢ SÁCH
-    # ----------------------------------------------------------------
+    # --- QUẢN LÝ TRẢ SÁCH ---
     def connect_quan_ly_tra_events(self):
         self.ui_tra.dateTra.setDate(QtCore.QDate.currentDate())
         self.ui_tra.txtPhatNgay.setText("2000")
@@ -242,9 +302,7 @@ class LibraryManager(QtWidgets.QMainWindow):
             for c, val in enumerate(row_d):
                 self.ui_tra.tableMuonTra.setItem(r, c, QtWidgets.QTableWidgetItem(str(val)))
 
-    # ----------------------------------------------------------------
-    # CÁC PHẦN GIỮ NGUYÊN
-    # ----------------------------------------------------------------
+    # --- TRANG CHỦ & THỐNG KÊ ---
     def cap_nhat_du_lieu_trang_chu(self):
         tk = dich_vu_trang_chu.lay_thong_ke_tong_hop()
         if tk:
@@ -298,7 +356,27 @@ class LibraryManager(QtWidgets.QMainWindow):
             ax_pie.set_title(f"Tỷ lệ trả sách ({lua_chon})", fontsize=10, fontweight='bold'); ax_pie.axis('equal')
         else: ax_pie.text(0.5, 0.5, "Không có dữ liệu trả sách", ha='center', va='center'); ax_pie.axis('off')
         self.ui_thongke.pieVLayout.addWidget(FigureCanvas(fig_pie))
+    
+    # --- QUẢN LÝ GÓP Ý ---
+    def connect_quan_ly_gop_y_events(self):
+        # Kết nối nút refresh trong giao diện QuanLyGopY
+        if hasattr(self.ui_gopy, 'btnRefresh'):
+            self.ui_gopy.btnRefresh.clicked.connect(self.load_data_gopy)
 
+    def load_data_gopy(self):
+        """Gọi service để lấy dữ liệu và đổ vào TableWidget"""
+        data = dich_vu_quan_ly_gop_y.lay_danh_sach_gop_y()
+        self.ui_gopy.tableGopY.setRowCount(0)
+        for r, row_d in enumerate(data):
+            self.ui_gopy.tableGopY.insertRow(r)
+            for c, val in enumerate(row_d):
+                item = QtWidgets.QTableWidgetItem(str(val))
+                # Căn giữa cho ID và Thời gian
+                if c != 1:
+                    item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+                self.ui_gopy.tableGopY.setItem(r, c, item)
+
+    # --- QUẢN LÝ NHÂN VIÊN ---
     def connect_quan_ly_nhan_vien_events(self):
         self.ui_nv.btnThem.clicked.connect(self.handle_them_nv); self.ui_nv.btnSua.clicked.connect(self.handle_sua_nv)
         self.ui_nv.btnXoa.clicked.connect(self.handle_xoa_nv); self.ui_nv.btnTimKiem.clicked.connect(self.handle_tim_kiem_nv)
@@ -340,6 +418,7 @@ class LibraryManager(QtWidgets.QMainWindow):
 
     def handle_tim_kiem_nv(self): self.load_data_nv(dich_vu_nv.tim_kiem_nv(self.ui_nv.txtTimKiem.text().strip()))
 
+    # --- NHÀ CUNG CẤP ---
     def connect_nha_cung_cap_events(self):
         self.ui_ncc.btnThem.clicked.connect(self.handle_them_ncc); self.ui_ncc.btnSua.clicked.connect(self.handle_sua_ncc)
         self.ui_ncc.btnXoa.clicked.connect(self.handle_xoa_ncc); self.ui_ncc.tableNCC.itemClicked.connect(self.handle_table_ncc_click)
@@ -371,6 +450,7 @@ class LibraryManager(QtWidgets.QMainWindow):
         if ma_ncc and QtWidgets.QMessageBox.question(self, "Xác nhận", "Xóa đối tác này?", QtWidgets.QMessageBox.StandardButton.Yes) == QtWidgets.QMessageBox.StandardButton.Yes:
             if dich_vu_ncc.xoa_ncc(ma_ncc)["ket_qua"] == "thanh_cong": self.load_data_ncc()
 
+    # --- NHẬP HÀNG ---
     def connect_nhap_hang_events(self):
         self.ui_nhap.btnThem.clicked.connect(self.handle_them_vao_bang_nhap); self.ui_nhap.btnXoa.clicked.connect(self.handle_xoa_dong_nhap)
         self.ui_nhap.btnXacNhan.clicked.connect(self.handle_xac_nhan_nhap_kho); self.refresh_nhap_hang_suggestions()
@@ -401,6 +481,7 @@ class LibraryManager(QtWidgets.QMainWindow):
         list_h = [{'ten_sach': self.ui_nhap.tableNhap.item(i, 2).text(), 'so_luong': int(self.ui_nhap.tableNhap.item(i, 3).text()), 'gia_nhap': float(self.ui_nhap.tableNhap.item(i, 4).text())} for i in range(row_count)]
         if dich_vu_nhap_hang.xac_nhan_nhap_kho(ten_ncc, list_h)["ket_qua"] == "thanh_cong": self.ui_nhap.tableNhap.setRowCount(0); self.cap_nhat_du_lieu_trang_chu()
 
+    # --- QUẢN LÝ SÁCH ---
     def connect_quan_ly_sach_events(self):
         self.ui_sach.btnThem.clicked.connect(self.handle_them_sach); self.ui_sach.btnSua.clicked.connect(self.handle_sua_sach)
         self.ui_sach.btnXoa.clicked.connect(self.handle_xoa_sach); self.ui_sach.btnTimKiem.clicked.connect(self.handle_tim_kiem_sach)
@@ -435,6 +516,7 @@ class LibraryManager(QtWidgets.QMainWindow):
 
     def handle_tim_kiem_sach(self): self.load_data_sach(dich_vu_quan_ly_sach.tim_kiem_sach(self.ui_sach.txtTimKiem.text().strip()))
 
+    # --- QUẢN LÝ MƯỢN ---
     def connect_quan_ly_muon_events(self):
         self.ui_muon.btnMuon.clicked.connect(self.handle_muon_sach); self.ui_muon.btnTimKiem.clicked.connect(self.handle_tim_kiem_muon)
         completer = QCompleter(dich_vu_muon_sach.lay_tat_ca_ten_sach()); completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
@@ -452,8 +534,9 @@ class LibraryManager(QtWidgets.QMainWindow):
 
     def handle_tim_kiem_muon(self): self.load_data_muon(dich_vu_muon_sach.tim_kiem_tong_hop(self.ui_muon.txtTimKiem.text().strip()))
 
+    # --- SIDEBAR & CHUYỂN TRANG ---
     def connect_sidebar_buttons(self):
-        self.button_map = {self.ui.btnTrangChu: 0, self.ui.btnSach: 1, self.ui.btnMuonSach: 2, self.ui.btnTraSach: 3, self.ui.btnNhapHang: 4, self.ui.btnNCC: 5, self.ui.btnNhanVien: 6, self.ui.btnThongKe: 7, self.ui.btnTaiKhoan: 8}
+        self.button_map = {self.ui.btnTrangChu: 0, self.ui.btnSach: 1, self.ui.btnMuonSach: 2, self.ui.btnTraSach: 3, self.ui.btnNhapHang: 4, self.ui.btnNCC: 5, self.ui.btnNhanVien: 6, self.ui.btnThongKe: 7, self.ui.btnTaiKhoan: 8, self.ui.btnGopY: 9}
         for btn, index in self.button_map.items():
             if btn: btn.clicked.connect(lambda checked, i=index: self.switch_page(i))
 
@@ -467,6 +550,7 @@ class LibraryManager(QtWidgets.QMainWindow):
         elif index == 6: self.load_data_nv()
         elif index == 7: self.load_data_thong_ke()
         elif index == 8: self.load_data_tk()
+        elif index == 9: self.load_data_gopy()
 
 # ================================================================
 # CHƯƠNG TRÌNH CHÍNH
@@ -485,11 +569,11 @@ if __name__ == "__main__":
 
     # Xử lý khi nhận signal đăng xuất từ main_win
     def on_logout_requested():
-        login_win.ui.txtPass.clear() # Xóa mật khẩu cũ để bảo mật
+        login_win.ui.txtPass.clear() 
         login_win.show()
 
     login_win.login_success.connect(on_login_success)
-    main_win.logout_requested.connect(on_logout_requested) # Kết nối chức năng đăng xuất
+    main_win.logout_requested.connect(on_logout_requested) 
 
     login_win.show()
     sys.exit(app.exec())

@@ -32,18 +32,24 @@ class Ui_MainWindow(object):
             QPushButton:checked { background-color: #34495e; color: white; border-left: 5px solid #3498db; }
         """
 
+        # Khởi tạo các nút menu
         self.btnTrangChu = QtWidgets.QPushButton("🏠   Trang chủ")
         self.btnSach = QtWidgets.QPushButton("📚   Quản lý sách")
         self.btnMuonSach = QtWidgets.QPushButton("📖   Quản lý mượn sách")
         self.btnTraSach = QtWidgets.QPushButton("🔄   Quản lý trả sách")
         self.btnNhapHang = QtWidgets.QPushButton("📦   Nhập hàng")
         self.btnNCC = QtWidgets.QPushButton("🏢   Nhà cung cấp")
-        self.btnNhanVien = QtWidgets.QPushButton("👥 Quản lý Nhân viên")
+        self.btnNhanVien = QtWidgets.QPushButton("👥   Quản lý nhân viên")
         self.btnThongKe = QtWidgets.QPushButton("📊   Thống kê báo cáo")
         self.btnTaiKhoan = QtWidgets.QPushButton("👤   Quản lý tài khoản")
+        self.btnGopY = QtWidgets.QPushButton("💬   Quản lý góp ý") # NÚT MỚI THÊM
 
-        self.menu_buttons = [self.btnTrangChu, self.btnSach, self.btnMuonSach, self.btnTraSach, 
-                             self.btnNhapHang, self.btnNCC, self.btnNhanVien, self.btnThongKe, self.btnTaiKhoan]
+        # Danh sách các nút để duyệt style và thêm vào layout
+        self.menu_buttons = [
+            self.btnTrangChu, self.btnSach, self.btnMuonSach, self.btnTraSach, 
+            self.btnNhapHang, self.btnNCC, self.btnNhanVien, self.btnThongKe, 
+            self.btnTaiKhoan, self.btnGopY
+        ]
 
         for btn in self.menu_buttons:
             btn.setCheckable(True)
@@ -63,6 +69,7 @@ class Ui_MainWindow(object):
         self.StackedWidget = QtWidgets.QStackedWidget(parent=self.centralwidget)
         self.StackedWidget.setStyleSheet("background-color: #f5f6fa;")
         
+        # Trang chủ mặc định (Index 0)
         self.page_home = QtWidgets.QWidget()
         self.setup_home_page(self.page_home)
         self.StackedWidget.addWidget(self.page_home)
@@ -81,7 +88,7 @@ class Ui_MainWindow(object):
         layout.addWidget(title)
         layout.setAlignment(title, QtCore.Qt.AlignmentFlag.AlignCenter)
 
-        # Thẻ thống kê nhanh - Gán các biến Label vào class để Main.py điều khiển được
+        # Thẻ thống kê nhanh
         stats_layout = QtWidgets.QHBoxLayout()
         
         box1, self.lbl_val_tong_sach = self.create_box("TỔNG SÁCH", "0", "#1abc9c")
@@ -93,22 +100,25 @@ class Ui_MainWindow(object):
         stats_layout.addWidget(box3)
         layout.addLayout(stats_layout)
 
-        # Bảng danh sách
+        # Bảng danh sách mượn mới nhất
         self.tableMuonSach = QtWidgets.QTableWidget()
         self.tableMuonSach.setColumnCount(4)
         self.tableMuonSach.setHorizontalHeaderLabels(["ID", "Mã phiếu mượn", "Mã sách", "Số lượng"])
         self.tableMuonSach.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
-        self.tableMuonSach.setStyleSheet("background-color: white; border-radius: 10px;")
+        self.tableMuonSach.setStyleSheet("""
+            QTableWidget { background-color: white; border-radius: 10px; border: 1px solid #dcdde1; }
+            QHeaderView::section { background-color: #34495e; color: white; padding: 5px; font-weight: bold; }
+        """)
         layout.addWidget(self.tableMuonSach)
 
     def create_box(self, title, value, color):
         box = QtWidgets.QFrame()
         box.setStyleSheet(f"background-color: {color}; border-radius: 15px; min-height: 120px;")
         l = QtWidgets.QVBoxLayout(box)
-        t = QtWidgets.QLabel(title); t.setStyleSheet("color: white; font-weight: bold;")
+        t = QtWidgets.QLabel(title); t.setStyleSheet("color: white; font-weight: bold; font-size: 11pt;")
         v = QtWidgets.QLabel(value); v.setStyleSheet("color: white; font-size: 24pt; font-weight: bold;")
         l.addWidget(t); l.addWidget(v)
-        return box, v # Quan trọng: Trả về box và label giá trị
+        return box, v 
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
